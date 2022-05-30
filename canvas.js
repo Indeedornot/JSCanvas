@@ -93,7 +93,7 @@ canvas.addEventListener("mouseup", (e) => {
         }
     }
     else if (mode.startsWith("circle")) {
-        ctx.arc(x, y, Math.floor((x - prevX) * Math.sqrt(2) / 3.5), 0, 2 * Math.PI);
+        ctx.arc(prevX, prevY, Math.floor((x - prevX) * Math.sqrt(2)), 0, 2 * Math.PI);
         ctx.closePath();
         if (mode.endsWith("Fill")) {
             ctx.fill();

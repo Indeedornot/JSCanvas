@@ -100,16 +100,19 @@ canvas.addEventListener("mouseup", (e) => {
     let y = pos.y;
     ctx.beginPath();
     if (mode.startsWith("rect")) {
-        ctx.rect(prevX, prevY, x - prevX, y - prevY);
-        ctx.closePath();
+        
         if (mode.endsWith("Fill")) {
+            ctx.rect(prevX, prevY, x - prevX, y - prevY);
+            ctx.closePath();
             ctx.fill();
         } else if (mode.endsWith("Stroke")) {
+            ctx.rect(prevX, prevY, x - prevX - ctx.lineWidth, y - prevY - ctx.lineWidth);
+            ctx.closePath();
             ctx.stroke();
         }
     } 
     else if (mode.startsWith("circle")) {
-        ctx.arc(x, y, Math.floor((x - prevX)*Math.sqrt(2)/3.5), 0, 2 * Math.PI);
+        ctx.arc(prevX, prevY, Math.floor((x - prevX)*Math.sqrt(2))-ctx.lineWidth, 0, 2 * Math.PI);
         ctx.closePath();
         if (mode.endsWith("Fill")) {
             ctx.fill();
