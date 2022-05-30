@@ -21,14 +21,24 @@
     width: 30px;
 }
 
-#modeButton {
-    position: fixed;
-    bottom: 0px;
+#modeButton, #downloadButton, #clearButton {
+
     background-color:
             black;
     z-index: 1;
-    border: 2px solid black;
     height: 30px;
-    width: 30px;
+    width: 90px;
     color: white;
+    bottom: 0;
+    position: fixed;
+    border: 2px white solid;
+    text-align: center;
+}
+
+#downloadButton{
+    left: 90px;
+}
+
+#clearButton{
+    left: 180px;
 }

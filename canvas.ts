@@ -145,4 +145,16 @@ function eraseLine(e){
     prevY = y;
 }
 
+
+let download = function(){
+    let link = document.createElement('a');
+    link.download = 'filename.png';
+    link.href = canvas.toDataURL()
+    link.click();
+}
+
+document.getElementById("downloadButton").onclick = download;
+document.getElementById("clearButton").onclick = function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
 //# sourceMappingURL=canvas.js.map
