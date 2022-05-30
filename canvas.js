@@ -4,7 +4,8 @@ ctx.strokeStyle = '#000000';
 ctx.lineWidth = 5;
 let prevX;
 let prevY;
-let mode = "circleFill";
+let mode = "erase";
+//erase
 //line
 //rectFill
 //rectStroke
@@ -35,12 +36,19 @@ canvas.addEventListener("mousedown", (e) => {
     if (mode == "line") {
         canvas.addEventListener("mousemove", drawLine);
     }
+    else if (mode == "erase") {
+        canvas.addEventListener("mousemove", eraseLine);
+    }
     // else if(mode.startsWith("rect")) just set the prevX and prevY to the corner of the rectangle
     // else if(mode.startsWith("circle")) just set the prevX and prevY to the corner of the rectangle
 });
 canvas.addEventListener("mouseup", (e) => {
     if (mode == "line") {
         canvas.removeEventListener("mousemove", drawLine);
+        return;
+    }
+    else if (mode == "erase") {
+        canvas.removeEventListener("mousemove", eraseLine);
         return;
     }
     let pos = getMousePos(canvas, e);
@@ -75,6 +83,18 @@ function drawLine(e) {
     ctx.beginPath();
     ctx.moveTo(x, y);
     ctx.lineTo(prevX, prevY);
+    ctx.closePath();
+    ctx.stroke();
+    prevX = x;
+    prevY = y;
+}
+function eraseLine(e) {
+    let pos = getMousePos(canvas, e);
+    let x = pos.x;
+    let y = pos.y;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.clearRect(prevX, prevY, ctx.lineWidth, ctx.lineWidth);
     ctx.closePath();
     ctx.stroke();
     prevX = x;
