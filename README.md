@@ -2,4 +2,4 @@
 
 An app that lets user draw a cube filled or stroked, circle filled or stroked, line and erase things drawn.
 
-![image](https://user-images.githubusercontent.com/49447848/171036281-94922211-aef7-4527-b6a3-2bfa4158318a.png)
+![image](https://user-images.githubusercontent.com/49447848/171043208-a845579e-829e-4a8e-aeaf-21dfe26c0dc8.png)
