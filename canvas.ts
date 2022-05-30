@@ -3,16 +3,49 @@ const ctx = canvas.getContext("2d");
 ctx.strokeStyle = '#000000';
 ctx.lineWidth = 5;
 
-let prevX;
-let prevY;
-
-let mode = "erase";
+const modeButton = document.getElementById("modeButton");
+let mode = "line";
 //erase
 //line
 //rectFill
 //rectStroke
 //circleFill
 //circleStroke
+modeButton.onclick = function () {
+    if (mode === "line") {
+        mode = "erase";
+        modeButton.innerText = "Erase";
+    } else if (mode === "erase")
+    {
+        mode = "rectFill";
+        modeButton.innerText = "Rectangle Fill";
+    }
+    else if (mode === "rectFill")
+    {
+        mode = "rectStroke";
+        modeButton.innerText = "Rectangle Stroke";
+    }
+    else if (mode === "rectStroke")
+    {
+        mode = "circleFill";
+        modeButton.innerText = "Circle Fill";
+    }
+    else if (mode === "circleFill")
+    {
+        mode = "circleStroke";
+        modeButton.innerText = "Circle Stroke";
+    }
+    else if (mode === "circleStroke")
+    {
+        mode = "line";
+        modeButton.innerText = "Line";
+    }
+};
+
+let prevX;
+let prevY;
+
+
 
 //region cursor preview
 let cursor = document.getElementById("cursor");
