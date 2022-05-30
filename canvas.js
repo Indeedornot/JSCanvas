@@ -4,10 +4,12 @@ ctx.strokeStyle = '#000000';
 ctx.lineWidth = 5;
 let prevX;
 let prevY;
-let mode = "line";
+let mode = "circleFill";
 //line
 //rectFill
 //rectStroke
+//circleFill
+//circleStroke
 //region cursor preview
 let cursor = document.getElementById("cursor");
 document.body.addEventListener("mousemove", function (e) {
@@ -31,19 +33,21 @@ canvas.addEventListener("mousedown", (e) => {
     prevX = pos.x;
     prevY = pos.y;
     if (mode == "line") {
-        canvas.addEventListener("mousemove", draw);
+        canvas.addEventListener("mousemove", drawLine);
     }
     // else if(mode.startsWith("rect")) just set the prevX and prevY to the corner of the rectangle
+    // else if(mode.startsWith("circle")) just set the prevX and prevY to the corner of the rectangle
 });
 canvas.addEventListener("mouseup", (e) => {
     if (mode == "line") {
-        canvas.removeEventListener("mousemove", draw);
+        canvas.removeEventListener("mousemove", drawLine);
+        return;
     }
-    else if (mode.startsWith("rect")) {
-        let pos = getMousePos(canvas, e);
-        let x = pos.x;
-        let y = pos.y;
-        ctx.beginPath();
+    let pos = getMousePos(canvas, e);
+    let x = pos.x;
+    let y = pos.y;
+    ctx.beginPath();
+    if (mode.startsWith("rect")) {
         ctx.rect(prevX, prevY, x - prevX, y - prevY);
         ctx.closePath();
         if (mode.endsWith("Fill")) {
@@ -53,8 +57,18 @@ canvas.addEventListener("mouseup", (e) => {
             ctx.stroke();
         }
     }
+    else if (mode.startsWith("circle")) {
+        ctx.arc(x, y, Math.floor((x - prevX) * Math.sqrt(2) / 3.5), 0, 2 * Math.PI);
+        ctx.closePath();
+        if (mode.endsWith("Fill")) {
+            ctx.fill();
+        }
+        else if (mode.endsWith("Stroke")) {
+            ctx.stroke();
+        }
+    }
 });
-function draw(e) {
+function drawLine(e) {
     let pos = getMousePos(canvas, e);
     let x = pos.x;
     let y = pos.y;
