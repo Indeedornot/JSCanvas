@@ -11,6 +11,7 @@ let mode = "line";
 //rectStroke
 //circleFill
 //circleStroke
+
 modeButton.onclick = function () {
     if (mode === "line") {
         mode = "erase";
@@ -45,8 +46,6 @@ modeButton.onclick = function () {
 let prevX;
 let prevY;
 
-
-
 //region cursor preview
 let cursor = document.getElementById("cursor");
 document.body.addEventListener("mousemove", function (e) {
@@ -54,9 +53,6 @@ document.body.addEventListener("mousemove", function (e) {
     cursor.style.top = e.clientY + "px";
 });
 //endregion
-
-console.log(canvas.offsetLeft);
-console.log(canvas.offsetTop);
 
 function getMousePos(canvas, evt) {
     let rect = canvas.getBoundingClientRect(), // abs. size of element
@@ -89,8 +85,7 @@ canvas.addEventListener("mouseup", (e) => {
         canvas.removeEventListener("mousemove", drawLine);
         return;
     }
-    else if(mode == "erase")
-    {
+    else if(mode == "erase") {
         canvas.removeEventListener("mousemove", eraseLine);
         return;
     }
@@ -148,7 +143,6 @@ function eraseLine(e){
     prevY = y;
 }
 
-
 let download = function(){
     let link = document.createElement('a');
     link.download = 'filename.png';
@@ -160,4 +154,17 @@ document.getElementById("downloadButton").onclick = download;
 document.getElementById("clearButton").onclick = function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
+
+const colorButton = document.getElementById("colorButton");
+colorButton.addEventListener("click", function (e){
+    let rect = colorButton.getBoundingClientRect();
+    let x = e.clientX - rect.left; //x position within the element.
+    let y = e.clientY - rect.top;  //y position within the element.
+    let xy = Math.sqrt(x^2 * y^2); //new value
+    let maxValue = Math.sqrt(colorButton.offsetWidth^2 * colorButton.offsetHeight^2); //max xy
+    let color = '#'+Math.floor(xy/maxValue*16777215).toString(16); //xy to color
+    colorButton.style.backgroundColor = color;
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+})
 //# sourceMappingURL=canvas.js.map
