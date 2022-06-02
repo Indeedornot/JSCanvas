@@ -23,8 +23,8 @@ document.body.addEventListener("mousemove", function (e) {
 //endregion
 function getMousePos(canvasElement, evt) {
     let rect = canvasElement.getBoundingClientRect(), // abs. size of element
-    scaleX = canvasElement.offsetWidth / rect.width, // relationship bitmap vs. element for x
-    scaleY = canvasElement.offsetHeight / rect.height; // relationship bitmap vs. element for y
+    scaleX = canvasElement.width / rect.width, // relationship bitmap vs. element for x
+    scaleY = canvasElement.height / rect.height; // relationship bitmap vs. element for y
     return {
         x: (evt.clientX - rect.left) * scaleX,
         y: (evt.clientY - rect.top) * scaleY // been adjusted to be relative to element
@@ -35,16 +35,10 @@ canvas.addEventListener("mousedown", (e) => {
     prevX = pos.x;
     prevY = pos.y;
     if (mode == modes.line) {
-        canvas.addEventListener("mousemove", function () {
-            let pos = getMousePos(canvas, e);
-            drawLine(pos.x, pos.y);
-        });
+        canvas.addEventListener("mousemove", drawLineEvent);
     }
     else if (mode == modes.erase) {
-        canvas.addEventListener("mousemove", function () {
-            let pos = getMousePos(canvas, e);
-            eraseLine(pos.x, pos.y);
-        });
+        canvas.addEventListener("mousemove", eraseLineEvent);
     }
     // else if(mode.startsWith("rect")) just set the prevX and prevY to the corner of the rectangle
     // else if(mode.startsWith("circle")) just set the prevX and prevY to the corner of the rectangle
@@ -55,16 +49,10 @@ canvas.addEventListener("mouseup", (e) => {
     let y = pos.y;
     switch (mode) {
         case modes.line:
-            canvas.removeEventListener("mousemove", function () {
-                let pos = getMousePos(canvas, e);
-                drawLine(pos.x, pos.y);
-            });
+            canvas.removeEventListener("mousemove", drawLineEvent);
             break;
         case modes.erase:
-            canvas.removeEventListener("mousemove", function () {
-                let pos = getMousePos(canvas, e);
-                eraseLine(pos.x, pos.y);
-            });
+            canvas.removeEventListener("mousemove", eraseLineEvent);
             break;
         case modes.rectFill:
             drawRectFilled(x, y);
@@ -81,6 +69,10 @@ canvas.addEventListener("mouseup", (e) => {
     }
 });
 //region drawFunctions
+function drawLineEvent(e) {
+    let pos = getMousePos(canvas, e);
+    drawLine(pos.x, pos.y);
+}
 function drawLine(x, y) {
     ctx.beginPath();
     ctx.moveTo(x, y);
@@ -89,6 +81,10 @@ function drawLine(x, y) {
     ctx.stroke();
     prevX = x;
     prevY = y;
+}
+function eraseLineEvent(e) {
+    let pos = getMousePos(canvas, e);
+    eraseLine(pos.x, pos.y);
 }
 function eraseLine(x, y) {
     ctx.beginPath();
