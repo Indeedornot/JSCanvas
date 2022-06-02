@@ -3,45 +3,16 @@ const ctx = canvas.getContext("2d");
 ctx.strokeStyle = '#000000';
 ctx.lineWidth = 5;
 
-const modeButton = document.getElementById("modeButton");
-let mode = "line";
-//erase
-//line
-//rectFill
-//rectStroke
-//circleFill
-//circleStroke
+enum modes {
+    line,
+    erase,
+    rectFill,
+    rectStroke,
+    circleFill,
+    circleStroke
+}
 
-modeButton.onclick = function () {
-    if (mode === "line") {
-        mode = "erase";
-        modeButton.innerText = "Erase";
-    } else if (mode === "erase")
-    {
-        mode = "rectFill";
-        modeButton.innerText = "Rectangle Fill";
-    }
-    else if (mode === "rectFill")
-    {
-        mode = "rectStroke";
-        modeButton.innerText = "Rectangle Stroke";
-    }
-    else if (mode === "rectStroke")
-    {
-        mode = "circleFill";
-        modeButton.innerText = "Circle Fill";
-    }
-    else if (mode === "circleFill")
-    {
-        mode = "circleStroke";
-        modeButton.innerText = "Circle Stroke";
-    }
-    else if (mode === "circleStroke")
-    {
-        mode = "line";
-        modeButton.innerText = "Line";
-    }
-};
+let mode = modes.line;
 
 let prevX;
 let prevY;
@@ -54,10 +25,10 @@ document.body.addEventListener("mousemove", function (e) {
 });
 //endregion
 
-function getMousePos(canvas, evt) {
-    let rect = canvas.getBoundingClientRect(), // abs. size of element
-        scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for x
-        scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for y
+function getMousePos(canvasElement : HTMLElement, evt) {
+    let rect = canvasElement.getBoundingClientRect(), // abs. size of element
+        scaleX = canvasElement.offsetWidth / rect.width,    // relationship bitmap vs. element for x
+        scaleY = canvasElement.offsetHeight / rect.height;  // relationship bitmap vs. element for y
 
     return {
         x: (evt.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
@@ -69,58 +40,57 @@ canvas.addEventListener("mousedown", (e) => {
     let pos = getMousePos(canvas, e);
     prevX = pos.x;
     prevY = pos.y;
-    if (mode == "line") {
-        canvas.addEventListener("mousemove", drawLine);
+    if (mode == modes.line) {
+        canvas.addEventListener("mousemove", function () {
+            let pos = getMousePos(canvas, e);
+            drawLine(pos.x, pos.y);
+        });
     }
-    else if(mode == "erase")
-    {
-        canvas.addEventListener("mousemove", eraseLine);
+    else if(mode == modes.erase) {
+        canvas.addEventListener("mousemove", function () {
+            let pos = getMousePos(canvas, e);
+            eraseLine(pos.x, pos.y)
+        });
     }
     // else if(mode.startsWith("rect")) just set the prevX and prevY to the corner of the rectangle
     // else if(mode.startsWith("circle")) just set the prevX and prevY to the corner of the rectangle
 });
 
 canvas.addEventListener("mouseup", (e) => {
-    if (mode == "line") {
-        canvas.removeEventListener("mousemove", drawLine);
-        return;
-    }
-    else if(mode == "erase") {
-        canvas.removeEventListener("mousemove", eraseLine);
-        return;
-    }
-    
     let pos = getMousePos(canvas, e);
     let x = pos.x;
     let y = pos.y;
-    ctx.beginPath();
-    if (mode.startsWith("rect")) {
-        
-        if (mode.endsWith("Fill")) {
-            ctx.rect(prevX, prevY, x - prevX, y - prevY);
-            ctx.closePath();
-            ctx.fill();
-        } else if (mode.endsWith("Stroke")) {
-            ctx.rect(prevX, prevY, x - prevX - ctx.lineWidth, y - prevY - ctx.lineWidth);
-            ctx.closePath();
-            ctx.stroke();
-        }
-    } 
-    else if (mode.startsWith("circle")) {
-        ctx.arc(prevX, prevY, Math.floor((x - prevX)*Math.sqrt(2))-ctx.lineWidth, 0, 2 * Math.PI);
-        ctx.closePath();
-        if (mode.endsWith("Fill")) {
-            ctx.fill();
-        } else if (mode.endsWith("Stroke")) {
-            ctx.stroke();
-        }
+    switch (mode) {
+        case modes.line:
+            canvas.removeEventListener("mousemove", function () {
+                let pos = getMousePos(canvas, e);
+                drawLine(pos.x, pos.y);
+            });
+            break;
+        case modes.erase:
+            canvas.removeEventListener("mousemove", function () {
+                let pos = getMousePos(canvas, e);
+                eraseLine(pos.x, pos.y)
+            });
+            break;
+        case modes.rectFill:
+            drawRectFilled(x, y);
+            break;
+        case modes.rectStroke:
+            drawRectStroked(x, y);
+            break;
+        case modes.circleFill:
+            drawCircleFilled(x, y);
+            break;
+        case modes.circleStroke:
+            drawCircleStroked(x, y);
+            break;
     }
 });
 
-function drawLine(e) {
-    let pos = getMousePos(canvas, e);
-    let x = pos.x;
-    let y = pos.y;
+//region drawFunctions
+function drawLine(x,y) {
+
     ctx.beginPath();
     ctx.moveTo(x, y);
     ctx.lineTo(prevX, prevY);
@@ -130,10 +100,8 @@ function drawLine(e) {
     prevY = y;
 }
 
-function eraseLine(e){
-    let pos = getMousePos(canvas, e);
-    let x = pos.x;
-    let y = pos.y;
+function eraseLine(x,y){
+
     ctx.beginPath();
     ctx.moveTo(x, y);
     ctx.clearRect(prevX, prevY, ctx.lineWidth, ctx.lineWidth);
@@ -143,15 +111,80 @@ function eraseLine(e){
     prevY = y;
 }
 
-let download = function(){
+function drawRectFilled(x,y){
+
+    ctx.beginPath();
+    ctx.rect(prevX, prevY, x - prevX, y - prevY);
+    ctx.closePath();
+    ctx.fill();
+}
+
+function drawRectStroked(x,y){
+
+    ctx.beginPath();
+    ctx.rect(prevX, prevY, x - prevX - ctx.lineWidth, y - prevY - ctx.lineWidth);
+    ctx.closePath();
+    ctx.stroke();
+}
+
+function drawCircleFilled(x,y){
+
+    ctx.beginPath();
+    ctx.arc(prevX, prevY, Math.floor((x - prevX)*Math.sqrt(2))-ctx.lineWidth, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.fill();
+}
+
+function drawCircleStroked(x,y){
+
+    ctx.beginPath();
+    ctx.arc(prevX, prevY, Math.floor((x - prevX)*Math.sqrt(2))-ctx.lineWidth, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.stroke();
+}
+//endregion
+
+//region buttons
+const modeButton = document.getElementById("modeButton");
+modeButton.onclick = function () {
+    if (mode == modes.line) {
+        mode = modes.erase;
+        modeButton.innerText = "Erase";
+    }
+    else if (mode == modes.erase) {
+        mode = modes.rectFill;
+        modeButton.innerText = "Rectangle Fill";
+    }
+    else if (mode == modes.rectFill) {
+        mode = modes.rectStroke;
+        modeButton.innerText = "Rectangle Stroke";
+    }
+    else if (mode == modes.rectStroke) {
+        mode = modes.circleFill;
+        modeButton.innerText = "Circle Fill";
+    }
+    else if (mode == modes.circleFill) {
+        mode = modes.circleStroke;
+        modeButton.innerText = "Circle Stroke";
+    }
+    else if (mode == modes.circleStroke) {
+        {
+            mode = modes.line;
+            modeButton.innerText = "Line";
+        }
+    }
+}
+
+const downloadButton = document.getElementById("downloadButton");
+downloadButton.onclick = function(){
     let link = document.createElement('a');
     link.download = 'filename.png';
     link.href = canvas.toDataURL()
     link.click();
-}
+};
 
-document.getElementById("downloadButton").onclick = download;
-document.getElementById("clearButton").onclick = function() {
+const clearButton = document.getElementById("clearButton");
+clearButton.onclick = function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -167,4 +200,16 @@ colorButton.addEventListener("click", function (e){
     ctx.strokeStyle = color;
     ctx.fillStyle = color;
 })
+
+const lineWidthButton = document.getElementById("widthButton");
+lineWidthButton.addEventListener("click", function (e){
+    let rect = lineWidthButton.getBoundingClientRect();
+    let x = e.clientX - rect.left; //x position within the element.
+    let maxValue = lineWidthButton.offsetWidth; //max x
+    ctx.lineWidth = Math.floor(x/maxValue*10);
+    lineWidthButton.innerText = String(ctx.lineWidth);
+    cursor.style.width = Math.ceil(ctx.lineWidth * 2.5) + "px";
+    cursor.style.height = Math.ceil(ctx.lineWidth * 2.5) + "px";
+});
+//endregion
 //# sourceMappingURL=canvas.js.map

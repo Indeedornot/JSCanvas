@@ -35,7 +35,7 @@ html, body, div{
     display: table;
 }
 
-#modeButton, #downloadButton, #clearButton, #colorButton {
+#buttons > * {
 
     background-color:
             black;
