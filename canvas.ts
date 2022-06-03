@@ -126,7 +126,7 @@ function drawRectStroked(x: number, y: number){
 function drawCircleFilled(x: number, _y: number) {
 
     ctx.beginPath();
-    ctx.arc(prevX, prevY, Math.floor((x - prevX)*Math.sqrt(2))-ctx.lineWidth, 0, 2 * Math.PI);
+    ctx.arc(prevX, prevY, Math.abs(Math.floor((x - prevX)*Math.sqrt(2))-ctx.lineWidth), 0, 2 * Math.PI);
     ctx.closePath();
     ctx.fill();
 }
@@ -134,7 +134,7 @@ function drawCircleFilled(x: number, _y: number) {
 function drawCircleStroked(x: number, _y: number){
 
     ctx.beginPath();
-    ctx.arc(prevX, prevY, Math.floor((x - prevX)*Math.sqrt(2))-ctx.lineWidth, 0, 2 * Math.PI);
+    ctx.arc(prevX, prevY, Math.abs(Math.floor((x - prevX)*Math.sqrt(2))-ctx.lineWidth), 0, 2 * Math.PI);
     ctx.closePath();
     ctx.stroke();
 }
