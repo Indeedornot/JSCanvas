@@ -273,4 +273,30 @@ lineWidthInput.addEventListener("input", function (){
 });
 //endregion
 
+
+//region ctrl Z
+
+let undoStack: Array<string> = [];
+canvas.addEventListener("mousedown", function (e) {
+    undoStack.push(canvas.toDataURL());
+    if(undoStack.length > 20)
+    {
+        undoStack.shift();
+    }
+});
+
+document.addEventListener("keydown", function (e) {
+    if (e.key == "z" && e.ctrlKey) {
+        if (undoStack.length > 0) {
+            let img = new Image();
+            img.src = undoStack.pop();
+            img.onload = function () {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+            }
+        }
+    }
+});
+
+//endregion
 //# sourceMappingURL=canvas.js.map

@@ -246,5 +246,26 @@ lineWidthInput.addEventListener("input", function () {
     cursor.style.height = Math.ceil(value * 2.5) + "px";
 });
 //endregion
+//region ctrl Z
+let undoStack = [];
+canvas.addEventListener("mousedown", function (e) {
+    undoStack.push(canvas.toDataURL());
+    if (undoStack.length > 20) {
+        undoStack.shift();
+    }
+});
+document.addEventListener("keydown", function (e) {
+    if (e.key == "z" && e.ctrlKey) {
+        if (undoStack.length > 0) {
+            let img = new Image();
+            img.src = undoStack.pop();
+            img.onload = function () {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+            };
+        }
+    }
+});
+//endregion
 //# sourceMappingURL=canvas.js.map
 //# sourceMappingURL=canvas.js.map
