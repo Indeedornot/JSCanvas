@@ -107,13 +107,13 @@ function drawRectStroked(x, y) {
     ctx.closePath();
     ctx.stroke();
 }
-function drawCircleFilled(x, y) {
+function drawCircleFilled(x, _y) {
     ctx.beginPath();
     ctx.arc(prevX, prevY, Math.floor((x - prevX) * Math.sqrt(2)) - ctx.lineWidth, 0, 2 * Math.PI);
     ctx.closePath();
     ctx.fill();
 }
-function drawCircleStroked(x, y) {
+function drawCircleStroked(x, _y) {
     ctx.beginPath();
     ctx.arc(prevX, prevY, Math.floor((x - prevX) * Math.sqrt(2)) - ctx.lineWidth, 0, 2 * Math.PI);
     ctx.closePath();
@@ -121,6 +121,10 @@ function drawCircleStroked(x, y) {
 }
 //endregion
 //region buttons
+const clearButton = document.getElementById("clearButton");
+clearButton.onclick = function () {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+};
 const modeButton = document.getElementById("modeButton");
 modeButton.onclick = function () {
     if (mode == modes.line) {
@@ -157,10 +161,6 @@ downloadButton.onclick = function () {
     link.href = canvas.toDataURL();
     link.click();
 };
-const clearButton = document.getElementById("clearButton");
-clearButton.onclick = function () {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-};
 const colorButton = document.getElementById("colorButton");
 colorButton.addEventListener("click", function (e) {
     let rect = colorButton.getBoundingClientRect();
@@ -173,15 +173,14 @@ colorButton.addEventListener("click", function (e) {
     ctx.strokeStyle = color;
     ctx.fillStyle = color;
 });
-const lineWidthButton = document.getElementById("widthButton");
-lineWidthButton.addEventListener("click", function (e) {
-    let rect = lineWidthButton.getBoundingClientRect();
-    let x = e.clientX - rect.left; //x position within the element.
-    let maxValue = lineWidthButton.offsetWidth; //max x
-    ctx.lineWidth = Math.floor(x / maxValue * 10);
-    lineWidthButton.innerText = String(ctx.lineWidth);
-    cursor.style.width = Math.ceil(ctx.lineWidth * 2.5) + "px";
-    cursor.style.height = Math.ceil(ctx.lineWidth * 2.5) + "px";
+const lineWidthInput = document.getElementById("widthRange");
+const lineWidthLabel = document.getElementById("widthRangeLabel");
+lineWidthInput.addEventListener("input", function (e) {
+    let value = parseInt(lineWidthInput.value);
+    ctx.lineWidth = value;
+    lineWidthLabel.innerText = String(value);
+    cursor.style.width = Math.ceil(value * 2.5) + "px";
+    cursor.style.height = Math.ceil(value * 2.5) + "px";
 });
 //endregion
 //# sourceMappingURL=canvas.js.map

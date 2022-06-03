@@ -6,6 +6,8 @@
       <change beforePath="$PROJECT_DIR$/canvas.js" beforeDir="false" afterPath="$PROJECT_DIR$/canvas.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/canvas.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/canvas.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/canvas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/canvas.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +47,8 @@
       <updated>1654109481580</updated>
       <workItem from="1654109485769" duration="1476000" />
       <workItem from="1654155519776" duration="119000" />
-      <workItem from="1654155684028" duration="3640000" />
+      <workItem from="1654155684028" duration="4219000" />
+      <workItem from="1654272622751" duration="1755000" />
     </task>
     <servers />
   </component>
