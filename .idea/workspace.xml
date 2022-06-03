@@ -33,7 +33,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="ts.external.directory.path" value="C:\Users\Indeed\AppData\Local\JetBrains\Toolbox\apps\WebStorm\ch-0\213.6777.57\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -48,7 +48,7 @@
       <workItem from="1654109485769" duration="1476000" />
       <workItem from="1654155519776" duration="119000" />
       <workItem from="1654155684028" duration="4219000" />
-      <workItem from="1654272622751" duration="1755000" />
+      <workItem from="1654272622751" duration="6742000" />
     </task>
     <servers />
   </component>
@@ -60,5 +60,17 @@
         <option value="$PROJECT_DIR$/canvas.js.map" />
       </list>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/canvas.ts</url>
+          <line>248</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

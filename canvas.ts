@@ -184,22 +184,87 @@ downloadButton.onclick = function(){
     link.click();
 };
 
-const colorButton = document.getElementById("colorButton");
-colorButton.addEventListener("click", function (e){
-    let rect = colorButton.getBoundingClientRect();
-    let x = e.clientX - rect.left; //x position within the element.
-    let y = e.clientY - rect.top;  //y position within the element.
-    let xy = Math.sqrt(x^2 * y^2); //new value
-    let maxValue = Math.sqrt(colorButton.offsetWidth^2 * colorButton.offsetHeight^2); //max xy
-    let color = '#'+Math.floor(xy/maxValue*16777215).toString(16); //xy to color
-    colorButton.style.backgroundColor = color;
-    ctx.strokeStyle = color;
-    ctx.fillStyle = color;
-})
+//region colorButton
+const colorList = [
+    "000000",
+    "993300",
+    "333300",
+    "003300",
+    "003366",
+    "000066",
+    "333399",
+    "333333",
+    "660000",
+    "FF6633",
+    "666633",
+    "336633",
+    "336666",
+    "0066FF",
+    "666699",
+    "666666",
+    "CC3333",
+    "FF9933",
+    "99CC33",
+    "669966",
+    "66CCCC",
+    "3366FF",
+    "663366",
+    "999999",
+    "CC66FF",
+    "FFCC33",
+    "FFFF66",
+    "99FF66",
+    "99CCCC",
+    "66CCFF",
+    "993366",
+    "CCCCCC",
+    "FF99CC",
+    "FFCC99",
+    "FFFF99",
+    "CCffCC",
+    "CCFFff",
+    "99CCFF",
+    "CC99FF",
+    "FFFFFF"
+];
+const colorPicker = document.getElementById("colorPicker");
+const colorHolder = document.getElementById("colorHolder");
+
+    //create colors
+for (const element of colorList) {
+    let li = document.createElement("li");
+    li.classList.add("colorItem");
+    li.style.color = "#" + element;
+    li.style.backgroundColor = "#" + element;
+    li.addEventListener("click", function (e) {
+        e.stopPropagation();
+        colorPicker.style.display = "none";
+        window.removeEventListener("resize", colorPickerPos);
+        ctx.strokeStyle = li.style.backgroundColor;
+        ctx.fillStyle = li.style.backgroundColor;
+    });
+    li.addEventListener("mouseover", function () {
+        colorHolder.style.backgroundColor = li.style.backgroundColor;
+        colorHolder.style.color = li.style.backgroundColor;
+    });
+    colorPicker.appendChild(li);
+}
+
+    //show colorPicker and fix position
+colorHolder.addEventListener("click", function (e) {
+    colorPickerPos();
+    window.addEventListener("resize",  colorPickerPos);
+    colorPicker.style.display = "inline-block";
+});
+let colorPickerPos = function (){
+    colorPicker.style.left = String(colorHolder.offsetLeft) + "px";
+    colorPicker.style.top = String(colorHolder.offsetTop - 90) + "px";
+}
+//endregion
 
 const lineWidthInput = <HTMLInputElement>document.getElementById("widthRange");
 const lineWidthLabel = document.getElementById("widthRangeLabel");
-lineWidthInput.addEventListener("input", function (e){
+lineWidthInput.addEventListener("input", function (){
     let value = parseInt(lineWidthInput.value);
     ctx.lineWidth = value;
     lineWidthLabel.innerText = String(value);
