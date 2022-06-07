@@ -19,7 +19,7 @@ let prevY;
 
 //region cursor preview
 let cursor = document.getElementById("cursor");
-document.body.addEventListener("mousemove", function (e) {
+document.body.addEventListener("pointermove", function (e) {
     cursor.style.left = e.clientX + "px";
     cursor.style.top = e.clientY + "px";
 });
@@ -36,30 +36,30 @@ function getMousePos(canvasElement : HTMLCanvasElement, evt) {
     }
 }
 
-canvas.addEventListener("mousedown", (e) => {
+canvas.addEventListener("pointerdown", (e) => {
     let pos = getMousePos(canvas, e);
     prevX = pos.x;
     prevY = pos.y;
     if (mode == modes.line) {
-        canvas.addEventListener("mousemove", drawLineEvent);
+        canvas.addEventListener("pointermove", drawLineEvent);
     }
     else if(mode == modes.erase) {
-        canvas.addEventListener("mousemove", eraseLineEvent);
+        canvas.addEventListener("pointermove", eraseLineEvent);
     }
     // else if(mode.startsWith("rect")) just set the prevX and prevY to the corner of the rectangle
     // else if(mode.startsWith("circle")) just set the prevX and prevY to the corner of the rectangle
 });
 
-canvas.addEventListener("mouseup", (e) => {
+canvas.addEventListener("pointerup", (e) => {
     let pos = getMousePos(canvas, e);
     let x = pos.x;
     let y = pos.y;
     switch (mode) {
         case modes.line:
-            canvas.removeEventListener("mousemove", drawLineEvent);
+            canvas.removeEventListener("pointermove", drawLineEvent);
             break;
         case modes.erase:
-            canvas.removeEventListener("mousemove", eraseLineEvent);
+            canvas.removeEventListener("pointermove", eraseLineEvent);
             break;
         case modes.rectFill:
             drawRectFilled(x, y);
@@ -243,7 +243,7 @@ for (const element of colorList) {
         ctx.strokeStyle = li.style.backgroundColor;
         ctx.fillStyle = li.style.backgroundColor;
     });
-    li.addEventListener("mouseover", function () {
+    li.addEventListener("pointerover", function () {
         colorHolder.style.backgroundColor = li.style.backgroundColor;
         colorHolder.style.color = li.style.backgroundColor;
     });
@@ -277,7 +277,7 @@ lineWidthInput.addEventListener("input", function (){
 //region ctrl Z
 
 let undoStack: Array<string> = [];
-canvas.addEventListener("mousedown", function (e) {
+canvas.addEventListener("pointerdown", function (e) {
     undoStack.push(canvas.toDataURL());
     if(undoStack.length > 20)
     {
